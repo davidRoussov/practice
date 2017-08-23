@@ -1,0 +1,1 @@
+cargo new "app" --bin
