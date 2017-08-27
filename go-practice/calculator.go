@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"fmt"
+	"strconv"
 )
 
 func main() {
@@ -46,9 +47,43 @@ func tokenize(text string) []string {
 				fmt.Println("DIVIDE")
 				tokens = append(tokens, character)
 				position++
-			default:
-				fmt.Println("INVALID INPUT")
+			case "(":
+				fmt.Println("OPEN BRACKET")
+				tokens = append(tokens, character)
 				position++
+			case ")":
+				fmt.Println("CLOSED BRACKET")
+				tokens = append(tokens, character)
+				position++
+			default:
+				if _, err := strconv.Atoi(character); err == nil {
+					fmt.Println("Looks like a number")
+					var number = character
+
+					if position > 0 {
+						var lastMatch = tokens[len(tokens) - 1]
+						if _, err := strconv.Atoi(lastMatch); err == nil {
+							var newNumber = lastMatch + number
+							tokens[len(tokens) - 1] = newNumber
+						} else {
+							tokens = append(tokens, number)
+						}
+					} else {
+						tokens = append(tokens, number)
+					}
+
+				
+
+
+
+					position++
+
+					
+
+				} else {
+					fmt.Println("DISCARDING INPUT")
+					position++
+				}
 		}
 	}
 
