@@ -71,15 +71,7 @@ func tokenize(text string) []string {
 					} else {
 						tokens = append(tokens, number)
 					}
-
-				
-
-
-
 					position++
-
-					
-
 				} else {
 					fmt.Println("DISCARDING INPUT")
 					position++
