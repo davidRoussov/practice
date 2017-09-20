@@ -49,7 +49,5 @@ public class BasicFrame implements GLEventListener {
       frame.add(glcanvas);
       frame.setSize(640, 480);
       frame.setVisible(true);
-      
 	}
-	
 }
