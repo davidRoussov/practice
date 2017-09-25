@@ -81,7 +81,14 @@ public class Triangle3d implements GLEventListener {
    
    @Override
    public void init( GLAutoDrawable drawable ) {
-      //method body
+	   final GL2 gl = drawable.getGL().getGL2();
+		
+	   gl.glShadeModel(GL2.GL_SMOOTH);
+	   gl.glClearColor(0f, 0f, 0f, 0f);
+	   gl.glClearDepth(1.0f);
+	   gl.glEnable(GL2.GL_DEPTH_TEST);
+	   gl.glDepthFunc(GL2.GL_LEQUAL);
+	   gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
    }
    
    @Override
