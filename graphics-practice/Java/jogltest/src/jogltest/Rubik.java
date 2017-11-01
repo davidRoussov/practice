@@ -38,21 +38,21 @@ public class Rubik implements GLEventListener {
 //		float[] floats = {0.0f, 0.7f, 0.5f, 1.0f};
 //		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, floats, 0);
 		
-		float[] gold = { 0.24725F, 0.1995F, 0.0745F, 1.0F,
-						 0.75164F, 0.60648F, 0.22648F, 1.0F,
-						 0.628281F, 0.555802F, 0.366065F, 1.0F,
-						 50.0F
-		};
-		
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		gl.glEnable(GL2.GL_NORMALIZE);
-		gl.glEnable(GL2.GL_COLOR_MATERIAL);
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, gold, 0);
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, gold, 4);
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, gold, 8);
-		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, gold[12]);
-		
+//		float[] gold = { 0.24725F, 0.1995F, 0.0745F, 1.0F,
+//						 0.75164F, 0.60648F, 0.22648F, 1.0F,
+//						 0.628281F, 0.555802F, 0.366065F, 1.0F,
+//						 50.0F
+//		};
+//		
+//		gl.glEnable(GL2.GL_LIGHTING);
+//		gl.glEnable(GL2.GL_LIGHT0);
+//		gl.glEnable(GL2.GL_NORMALIZE);
+//		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+//		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, gold, 0);
+//		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, gold, 4);
+//		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, gold, 8);
+//		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, gold[12]);
+//		
 		
 //		gl.glEnable(GL2.GL_LIGHTING);
 //		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, gold, 0);
@@ -276,6 +276,21 @@ public class Rubik implements GLEventListener {
 		for (int i = 0; i < randomColors.length; i++) {
 			randomColors[i] = random.nextInt(6);
 		}
+		
+		
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		gl.glEnable(GL2.GL_LIGHT1);
+		
+		float a[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float b[] = { 0.1f, 0.1f, 0.1f, 0.1f };
+		float c[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, a, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, b, 0);
+		
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, c, 0);
+		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 12.0f);
 	}
 
 	@Override

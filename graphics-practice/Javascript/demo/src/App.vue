@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <!-- <img src="./assets/logo.png">
+    <hello></hello> -->
+    <demo-list></demo-list>
+    <div id='demo'>
+      <lesson0></lesson0>
+    </div>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import DemoList from './components/DemoList'
+import Lesson0 from './components/Lesson0'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    DemoList,
+    Lesson0
   }
 }
 </script>
@@ -23,6 +29,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+#demo {
+  margin-left: 250px;
 }
 </style>

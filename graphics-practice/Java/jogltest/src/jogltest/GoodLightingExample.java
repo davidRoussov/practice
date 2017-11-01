@@ -154,7 +154,7 @@ public class GoodLightingExample implements GLEventListener {
 		
 		float sf[] = { 1.0f, 1.0f, 1.0f, 0.0f };
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, sf, 0);
-		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10.0f);
+		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 12.0f);
 		
 		
 	}
