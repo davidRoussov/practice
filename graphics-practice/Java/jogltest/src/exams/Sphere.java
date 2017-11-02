@@ -12,11 +12,12 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class Two implements GLEventListener {
+public class Sphere implements GLEventListener {
 	
 	private float rotation = 0.0f;
 	private float radius = 0.25f;
 	private float res = 0.01f;
+	GLU glu = new GLU();
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -25,7 +26,6 @@ public class Two implements GLEventListener {
 		gl.glLoadIdentity();
 		gl.glRotatef(this.rotation, 1.0f, 1.0f, 1.0f);
 		
-		GLU glu = new GLU();
         gl.glColor3f(1.0f, 0.0f, 0.0f);
         GLUquadric quadratic = glu.gluNewQuadric();
         
@@ -60,8 +60,8 @@ public class Two implements GLEventListener {
 		gl.glEnable(GL2.GL_LIGHT1);
 		
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, new float[] { 0.1f, 0.1f, 0.1f, 0.1f }, 0);		
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, new float[] { 0.2f, 0.3f, 0.4f, 1.0f }, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, new float[] { 1.0f, 1.0f, -1.0f, 1.0f }, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, new float[] { 2.0f, 0.0f, 0.0f, 1.0f }, 0);
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, new float[] { 1.0f, 1.0f, -1.0f, 1.0f }, 0);		
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class Two implements GLEventListener {
 		GLCapabilities capabilities = new GLCapabilities(profile);
 		
 		final GLCanvas glcanvas = new GLCanvas(capabilities);
-		Two two = new Two();
+		Sphere two = new Sphere();
 		
 		glcanvas.addGLEventListener(two);
 		glcanvas.setSize(1500, 1000);
