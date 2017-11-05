@@ -1,7 +1,9 @@
 package exams;
 
-import javax.swing.JFrame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.JFrame;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -12,7 +14,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.gl2.GLUT;
 
-public class BorderedCube implements GLEventListener {
+public class BorderedCube implements GLEventListener, KeyListener {
 	
 	private GLU glu = new GLU();
 	
@@ -24,11 +26,22 @@ public class BorderedCube implements GLEventListener {
 	private float[] magenta = { 1.0f, 0.0f, 1.0f };
 	
 	private float rotation = 0.0f;
+	
+	private float cameraX = 1.0f;
+	private float cameraY = 1.0f;
+	private float cameraZ = 1.0f;
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		final GL2 gl = drawable.getGL().getGL2();
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+		
+		gl.glLoadIdentity();
+		System.out.println(cameraX);
+		System.out.println(cameraY);
+		System.out.println("*************");
+		glu.gluLookAt(this.cameraX, this.cameraY, this.cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+		
 		gl.glPushMatrix();
 		gl.glRotatef(this.rotation, 0.0f, 0.0f, 1.0f);
 		gl.glScalef(0.5f, 0.5f, 0.5f);
@@ -65,6 +78,7 @@ public class BorderedCube implements GLEventListener {
 		gl.glRotatef(-90, 1, 0, 0);
 		this.drawSquare(gl);
 		gl.glPopMatrix();
+		
 		
 		gl.glPopMatrix();
 		
@@ -113,7 +127,7 @@ public class BorderedCube implements GLEventListener {
 		glu.gluPerspective(60, 1.0, 0.1, 1000.0);
 		gl2.glMatrixMode(GL2.GL_MODELVIEW);
 		gl2.glLoadIdentity();
-		glu.gluLookAt(2.0, 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+		glu.gluLookAt(this.cameraX, this.cameraY, this.cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 	}
 
 	@Override
@@ -129,6 +143,7 @@ public class BorderedCube implements GLEventListener {
 		final GLCanvas glcanvas = new GLCanvas(capabilities);
 		BorderedCube bc = new BorderedCube();
 		glcanvas.addGLEventListener(bc);
+		glcanvas.addKeyListener(bc);
 		glcanvas.setSize(1500, 1500);
 		
 		final JFrame frame = new JFrame("Bordered Cube");
@@ -139,5 +154,33 @@ public class BorderedCube implements GLEventListener {
 		FPSAnimator animator = new FPSAnimator(glcanvas, 200, true);
 		animator.start();
 	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int kc = e.getKeyCode();
+		float increment = 0.12f;
+		if (kc == 37) {
+			this.cameraZ -= increment;
+		} else if (kc == 39) {
+			this.cameraZ += increment;
+		} else if (kc == 38) {
+			this.cameraY += increment; 
+		} else if (kc == 40) {
+			this.cameraY -= increment;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
