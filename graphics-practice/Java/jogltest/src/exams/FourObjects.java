@@ -1,5 +1,7 @@
 package exams;
 
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -9,7 +11,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class FourObjects implements GLEventListener {
+public class FourObjects implements GLEventListener, KeyListener {
 	
 	private GLU glu = new GLU();
 	
@@ -27,13 +29,17 @@ public class FourObjects implements GLEventListener {
 	private float[] col6 = { 0.0f, 1.0f, 1.0f };
 	
 	private float[] wallColour = { 0.5f, 0.5f, 0.5f };
+	
+	private float lightPosX = 0.0f;
+	private float lightPosY = 0.0f;
+	private float lightPosZ = -2.0f;
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		final GL2 gl = drawable.getGL().getGL2();
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glPushMatrix();
-		
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, new float[] { lightPosX, lightPosY, lightPosZ, 0.0f }, 0);
 //		gl.glRotatef(45, -1.0f, -1.0f, -1.0f);
 		gl.glScalef(0.75f, 0.75f, 0.75f);
 		
@@ -53,7 +59,7 @@ public class FourObjects implements GLEventListener {
 	private void drawWall(GL2 gl) {
 		gl.glPushMatrix();
 		gl.glTranslatef(0.0f, -1.0f, 0.0f);
-//		gl.glScalef(1.25f, 0.5f, 1.25f);
+		gl.glScalef(1.5f, 0.5f, 1.5f);
 		drawWallFace1(gl);
 		
 		gl.glPushMatrix();
@@ -124,7 +130,7 @@ public class FourObjects implements GLEventListener {
 	}
 	
 	private void drawCubes(GL2 gl) {
-		gl.glScalef(0.1f, 0.1f, 0.1f);
+		gl.glScalef(0.12f, 0.12f, 0.12f);
 		
 		float d = 5.0f;
 		
@@ -285,7 +291,6 @@ public class FourObjects implements GLEventListener {
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, new float[] { 0.2f, 0.2f, 0.2f, 0.2f }, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, new float[] { 0.6f, 0.6f, 0.6f, 0.6f }, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, new float[] { 0.0f, 0.0f, -2.0f, 0.0f }, 0);
 		
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 0);
 		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 12.0f);
@@ -309,10 +314,47 @@ public class FourObjects implements GLEventListener {
 		
 		final GLWindow window = GLWindow.create(capabilities);
 		window.addGLEventListener(fourObjects);
+		window.addKeyListener(fourObjects);
 		window.setSize(1500, 1500);
 		window.setVisible(true);
 		
 		final FPSAnimator animator = new FPSAnimator(window, 200, true);
 		animator.start();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		switch(keyCode) {
+		case 81:
+			lightPosX += rotationIncrement;
+			break;
+		case 87:
+			lightPosY += rotationIncrement;
+			break;
+		case 69:
+			lightPosZ += rotationIncrement;
+			break;
+		case 65:
+			lightPosX -= rotationIncrement;
+			break;
+		case 83:
+			lightPosY -= rotationIncrement;
+			break;
+		case 68:
+			lightPosZ -= rotationIncrement;
+			break;
+		}
+		
+		System.out.println("LightPosX: " + lightPosX);
+		System.out.println("LightPosY: " + lightPosY);
+		System.out.println("LightPosZ: " + lightPosZ);
+		System.out.println("******************************************************************");
 	}
 }
