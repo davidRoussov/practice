@@ -1,7 +1,5 @@
 package exams;
 
-import javax.swing.JFrame;
-
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
@@ -10,7 +8,6 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -30,9 +27,9 @@ public class Rubik4 implements GLEventListener, MouseListener {
 	float d = 0.5f;
 	float z = 1.5f;
 	
-	private boolean isSwiping = false;
-	private int mousePressX;
-	private int mousePressY;
+	private boolean isDragging = false;
+	private int mouseX;
+	private int mouseY;
 	private float rotateX = 1.0f;
 	private float rotateY = 1.0f;
 	private float rotateZ = 1.0f;
@@ -41,18 +38,16 @@ public class Rubik4 implements GLEventListener, MouseListener {
 	public void display(GLAutoDrawable drawable) {
 		final GL2 gl = drawable.getGL().getGL2();
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-		gl.glPushMatrix();
 		
+		gl.glPushMatrix();
 		gl.glScalef(0.35f, 0.35f, 0.35f);
 		gl.glRotatef(40f, -1.0f, -1.0f, -0.8f);
-		
 		drawFloor(gl);
-		
-		gl.glScalef(0.25f, 0.25f, 0.25f);
-		gl.glRotatef(rotation, 1.0f, 1.0f, 1.0f);
-		
+
+		gl.glLoadIdentity();
+		gl.glScalef(0.1f, 0.1f, 0.1f);
+		gl.glRotatef(rotation, rotateX, rotateY, rotateZ);
 		drawCube(gl);
-		
 		
 		gl.glFlush();		
 		gl.glPopMatrix();
@@ -256,15 +251,15 @@ public class Rubik4 implements GLEventListener, MouseListener {
 //		glu.gluLookAt(4.0f, 4.0f, -4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		
 		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+//		gl.glEnable(GL2.GL_COLOR_MATERIAL);
 		gl.glEnable(GL2.GL_LIGHT1);
 		
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, new float[] { 0.2f, 0.2f, 0.2f, 0.2f }, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, new float[] { 0.8f, 0.8f, 0.8f, 0.8f }, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 0);
-		gl.glLightfv(GL2.GL_POSITION, GL2.GL_POSITION, new float[] { 3.0f, 2.0f, -4.0f, 0.0f }, 0);
+		gl.glLightfv(GL2.GL_POSITION, GL2.GL_POSITION, new float[] { 0.0f, 0.0f, 2.0f, 0.0f }, 0);
 		
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 0);
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, new float[] { 0.2f, 0.4f, 0.8f, 1.0f }, 0);
 		gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 128.0f);
 	}
 
@@ -278,10 +273,7 @@ public class Rubik4 implements GLEventListener, MouseListener {
 		final GLProfile profile = GLProfile.get(GLProfile.GL2);
 		GLCapabilities capabilities = new GLCapabilities(profile);
 		
-//		final GLCanvas glcanvas = new GLCanvas(capabilities);
 		Rubik4 rubik = new Rubik4();
-//		glcanvas.addGLEventListener(rubik);
-//		glcanvas.setSize(1500, 1500);
 		
 		final GLWindow window = GLWindow.create(capabilities);
 		window.addGLEventListener(rubik);
@@ -289,12 +281,6 @@ public class Rubik4 implements GLEventListener, MouseListener {
 		window.setFullscreen(false);
 		window.setSize(1500, 1500);
 		window.setVisible(true);
-
-//		
-//		final JFrame frame = new JFrame("Toothbrush");
-//		frame.getContentPane().add(glcanvas);
-//		frame.setSize(frame.getContentPane().getPreferredSize());
-//		frame.setVisible(true);
 		
 		final FPSAnimator animator = new FPSAnimator(window, 200, true);
 		animator.start();
@@ -307,8 +293,37 @@ public class Rubik4 implements GLEventListener, MouseListener {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		System.out.println("hi there!");
+	public void mouseDragged(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		
+		if (isDragging) {
+			float inc = 2.5f;
+			
+			if (x == mouseX && y > mouseY) {
+				rotateX = -1.0f;
+				
+				rotation += inc;
+			} else if (x == mouseX && y < mouseY) {
+				rotateX = -1.0f;
+				
+				rotation -= inc;
+			} else if (y == mouseY && x > mouseX) {
+				rotateY = -1.0f;
+				
+				rotation += inc;
+			} else if (y == mouseY && x < mouseX) {
+				rotateY = -1.0f;
+				
+				rotation -= inc;
+			}
+			
+		} else {
+			isDragging = true;
+		}
+		
+		mouseX = x;
+		mouseY = y;
 	}
 
 	@Override
@@ -337,8 +352,7 @@ public class Rubik4 implements GLEventListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		isDragging = false;
 	}
 
 	@Override

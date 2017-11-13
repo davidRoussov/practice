@@ -25,6 +25,7 @@ public class Scene extends ArrayList<Sphere> {
 			}
 		}
 		if (hit != null) {
+			System.out.println(hit.toString());
 			return hit.color;
 		} else {
 			return background;
